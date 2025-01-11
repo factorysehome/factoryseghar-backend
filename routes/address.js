@@ -2,7 +2,7 @@ const express = require("express");
 const addressSchema = require("../models/Address");
 const router = express.Router();
 
-router.post("/addAddresse", async (req, res) => {
+router.post("/addAddress", async (req, res) => {
   const {
     email,
     name,
