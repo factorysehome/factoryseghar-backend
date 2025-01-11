@@ -37,4 +37,16 @@ router.post("/addItem", async (req, res) => {
   }
 });
 
+router.post("/getItems", async (req, res) => {
+  const { category } = req.body;
+  if (category === "ALL") {
+    const response = await AddItemSchema.find({ category: "electronics" });
+    res.status(200).json({
+      status: "success",
+      message: "Item reterived successfully",
+      data: response,
+    });
+  }
+});
+
 module.exports = router;
