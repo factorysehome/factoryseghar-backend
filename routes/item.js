@@ -3,24 +3,16 @@ const router = express.Router();
 const AddItemSchema = require("../models/AddItem");
 
 router.post("/addItem", async (req, res) => {
-  const { name, variants, sku, image, description, category, caseSize } =
-    req.body;
+  const { name, image, description, category, productDetail } = req.body;
 
   try {
-    if (!variants || !sku) {
-      return res
-        .status(400)
-        .json({ message: "Variants and SKU are required." });
-    }
     const base64Data = image.split(",")[1]; // Remove "data:image/png;base64," part
     const binaryData = Buffer.from(base64Data, "base64");
     const contentType = image.split(";")[0].split(":")[1];
 
     const newItem = new AddItemSchema({
       name,
-      variants,
-      sku,
-      caseSize,
+      productDetail,
       image: {
         data: binaryData,
         contentType,
