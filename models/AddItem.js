@@ -6,11 +6,14 @@ const AddItem = new mongoose.Schema({
   },
   variants: {
     type: [String],
-    required: true,
+    // required: true,
   },
   sku: {
-    type: String,
-    required: true,
+    type: [String],
+    // required: true,
+  },
+  caseSize: {
+    type: [String],
   },
   image: {
     data: Buffer, // Binary data for the image
