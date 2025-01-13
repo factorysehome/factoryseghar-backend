@@ -6,7 +6,7 @@ const AddItem = new mongoose.Schema({
   },
 
   productDetail: {
-    type: [String],
+    type: [],
     // required: true,
   },
   image: {
