@@ -3,7 +3,8 @@ const router = express.Router();
 const AddItemSchema = require("../models/AddItem");
 
 router.post("/addItem", async (req, res) => {
-  const { name, variants, sku, image, description, category } = req.body;
+  const { name, variants, sku, image, description, category, caseSize } =
+    req.body;
 
   try {
     if (!variants || !sku) {
@@ -19,6 +20,7 @@ router.post("/addItem", async (req, res) => {
       name,
       variants,
       sku,
+      caseSize,
       image: {
         data: binaryData,
         contentType,
@@ -78,10 +80,30 @@ router.post("/getItems", async (req, res) => {
       });
     } else {
       const response = await AddItemSchema.find({ category: category });
+
+      const newResponse = response.map((item) => {
+        let base64Image = null;
+
+        if (item.image && item.image.data) {
+          base64Image = `data:image/png;base64,${item.image.data.toString(
+            "base64"
+          )}`;
+        }
+
+        return {
+          name: item.name,
+          variants: item.variants,
+          sku: item.sku,
+          description: item.description,
+          category: item.category,
+          base64Image, // Optional Base64 image
+        };
+      });
+
       res.status(200).json({
         status: "success",
         message: "Item reterived successfully",
-        data: response,
+        data: newResponse,
       });
     }
   } catch (err) {
