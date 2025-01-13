@@ -13,8 +13,7 @@ const AddItem = new mongoose.Schema({
     required: true,
   },
   image: {
-    data: Buffer,
-    contentType: String,
+    type: String,
   },
   description: {
     type: String,
