@@ -4,16 +4,10 @@ const AddItem = new mongoose.Schema({
   name: {
     type: String,
   },
-  variants: {
+
+  productDetail: {
     type: [String],
     // required: true,
-  },
-  sku: {
-    type: [String],
-    // required: true,
-  },
-  caseSize: {
-    type: [String],
   },
   image: {
     data: Buffer, // Binary data for the image
