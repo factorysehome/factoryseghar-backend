@@ -59,9 +59,19 @@ router.post("/sign-in", async (req, res) => {
       $or: [{ email }, { mobile }],
     });
     if (existingUser) {
+      let message = "User already registered";
+
+      if (existingUser.email === email && existingUser.mobile === mobile) {
+        message = "Both email and mobile are already registered";
+      } else if (existingUser.email === email) {
+        message = "Email is already registered";
+      } else if (existingUser.mobile === mobile) {
+        message = "Mobile number is already registered";
+      }
+
       return res.status(400).json({
         status: "failed",
-        message: "User already registered",
+        message,
       });
     }
 
@@ -108,7 +118,6 @@ router.post("/sign-in", async (req, res) => {
     res.status(500).json({
       status: "failed",
       error: err.message,
-      message: "Failed to verify the OTP",
     });
   }
 });
