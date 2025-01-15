@@ -10,8 +10,7 @@ const AddItem = new mongoose.Schema({
     // required: true,
   },
   image: {
-    data: Buffer, // Binary data for the image
-    contentType: String, // MIME type of the image (e.g., 'image/png')
+    type: String,
   },
   description: {
     type: String,
@@ -21,4 +20,4 @@ const AddItem = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("AddItemSchema", AddItem);
+module.exports = mongoose.model("ItemSchema", AddItem);
