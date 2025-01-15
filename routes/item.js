@@ -68,68 +68,26 @@ router.post("/addItem", async (req, res) => {
 router.post("/getItems", async (req, res) => {
   const { category } = req.body;
   try {
+    let response;
     if (category === "ALL") {
-      const response = await AddItemSchema.find();
-      console.log(response);
-
-      const newResponse = response.map((item) => {
-        let base64Image = null;
-
-        // Convert binary image to Base64
-        if (item.image && item.image.data) {
-          base64Image = `data:image/png;base64,${item.image.data.toString(
-            "base64"
-          )}`;
-        }
-
-        // Return the required fields and the base64Image
-        return {
-          name: item.name,
-          variants: item.variants,
-          sku: item.sku,
-          description: item.description,
-          category: item.category,
-          base64Image, // Optional Base64 image
-        };
-      });
-
-      res.status(200).json({
-        status: "success",
-        message: "Items retrieved successfully",
-        data: newResponse,
-      });
+      response = await ItemSchema.find();
     } else {
-      const response = await AddItemSchema.find({ category: category });
-
-      const newResponse = response.map((item) => {
-        let base64Image = null;
-
-        if (item.image && item.image.data) {
-          base64Image = `data:image/png;base64,${item.image.data.toString(
-            "base64"
-          )}`;
-        }
-
-        return {
-          name: item.name,
-          variants: item.variants,
-          sku: item.sku,
-          description: item.description,
-          category: item.category,
-          base64Image, // Optional Base64 image
-        };
-      });
-
-      res.status(200).json({
-        status: "success",
-        message: "Item reterived successfully",
-        data: newResponse,
-      });
+      response = await ItemSchema.find({ category: category });
     }
+
+    res.status(200).json({
+      status: "success",
+      message: "Items retrieved successfully",
+      data: {
+        items: response,
+        itemCount: response.length, // Add item count inside the data object
+      },
+    });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       status: "failed",
-      message: "Something went wront",
+      message: "Something went wrong",
     });
   }
 });
