@@ -10,7 +10,7 @@ router.post("/getProfile", async (req, res) => {
       data: profile,
     });
   } catch (err) {
-    console.error("Error in userProfile:", err.message); // Updated for better readability
+    console.error("Error in userProfile:", err.message);
     res
       .status(500)
       .json({ message: "Error fetching user profile", error: err.message });

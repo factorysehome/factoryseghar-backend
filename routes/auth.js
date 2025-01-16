@@ -31,6 +31,7 @@ router.post("/verify-otp", async (req, res) => {
         status: "success",
         message: "OTP verified successfully",
         firstLogin: false,
+        data: mobile,
       });
     } else {
       // New user, returning response
@@ -38,6 +39,7 @@ router.post("/verify-otp", async (req, res) => {
         status: "success",
         message: "OTP verified successfully",
         firstLogin: true,
+        data: mobile,
       });
     }
   } catch (err) {
