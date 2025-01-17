@@ -73,7 +73,7 @@ router.post("/payment-verification", async (req, res) => {
     );
 
     const user = await authSchema.findOne({ mobile: order?.mobile });
-    console.log(user.referredBy);
+    console.log(user);
 
     if (user.referredBy && !order.cashbackCredited) {
       const totalOrderByUser = await orderSchema.find({
