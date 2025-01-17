@@ -41,6 +41,7 @@ const orderSchema = new mongoose.Schema({
     enum: ["pending", "paid"],
     default: "pending",
   },
+  cashbackCredited: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 

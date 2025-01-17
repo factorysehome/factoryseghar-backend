@@ -2,6 +2,7 @@ const express = require("express");
 const orderSchema = require("../models/Order");
 const razorpayInstance = require("../config/razorpay");
 const crypto = require("crypto");
+const authSchema = require("../models/Auth");
 
 const router = express.Router();
 function generateOrderId() {
@@ -71,11 +72,41 @@ router.post("/payment-verification", async (req, res) => {
       { new: true }
     );
 
+    const user = await authSchema.findOne({ mobile: order?.mobile });
+    console.log(user.referredBy);
+
+    if (user.referredBy && !order.cashbackCredited) {
+      const totalOrderByUser = await orderSchema.find({
+        mobile: order?.mobile,
+      });
+      console.log(totalOrderByUser, totalOrderByUser.length);
+      let cashbackAmount = totalOrderByUser.length > 1 ? 50 : 100;
+
+      const referredBy = await authSchema.findOne({
+        referralCode: user.referredBy,
+      });
+
+      const newCashbackInfo = {
+        title: "Referral bonus",
+        amount: cashbackAmount,
+        time: new Date().toISOString(),
+        name: user.fullName,
+      };
+
+      // Add the new cashback information
+      referredBy.cashbackInfomation.push(newCashbackInfo);
+      referredBy.cashback += cashbackAmount;
+      await referredBy.save();
+      order.cashbackCredited = true;
+      await order.save();
+    }
+    res.status(200).json({
+      message: "Payment verified successfully",
+      order,
+    });
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
-
-    res.status(200).json({ message: "Payment verified successfully", order });
   } catch (error) {
     console.error("Error verifying payment:", error);
     res.status(500).json({ error: "Internal server error" });
