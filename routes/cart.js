@@ -4,33 +4,69 @@ const router = express.Router();
 
 router.post("/addCart", async (req, res) => {
   const { cartItems, customerName, mobile, favoritesItems } = req.body;
+
   try {
     const existingCart = await cartSchema.findOne({ mobile });
+
     if (existingCart) {
-      existingCart.cartItems = cartItems;
-      existingCart.favoritesItems = favoritesItems;
+      // Find the index of the item in the cart
+      const existingItemIndex = existingCart.cartItems.findIndex(
+        (item) =>
+          item.productName === cartItems.productName &&
+          JSON.stringify(item.productDetail) ===
+            JSON.stringify(cartItems.productDetail)
+      );
+
+      if (existingItemIndex !== -1) {
+        const existingItem = existingCart.cartItems[existingItemIndex];
+        existingItem.quantity = cartItems.quantity;
+
+        // If the quantity becomes zero or less, remove the item from the cart
+        if (existingItem.quantity <= 0) {
+          existingCart.cartItems.splice(existingItemIndex, 1);
+        }
+      } else {
+        // Add the item to the cart if it does not already exist and the quantity is greater than zero
+        if (cartItems.quantity > 0) {
+          existingCart.cartItems.push(cartItems);
+        }
+      }
+
+      // Update favorites if provided
+      if (favoritesItems) {
+        existingCart.favoritesItems = favoritesItems;
+      }
+
       await existingCart.save();
       res.status(201).json({
         status: "success",
-        message: "item added in cart successfully",
+        message: "Cart updated successfully",
         data: existingCart,
       });
     } else {
-      const cart = new cartSchema({
-        cartItems,
-        favoritesItems,
-        customerName,
-        mobile,
-      });
-      await cart.save();
-      res.status(201).json({
-        status: "success",
-        message: "Item added in cart successfully",
-        data: cart,
-      });
+      // If the cart does not exist, create a new one only if quantity > 0
+      if (cartItems.quantity > 0) {
+        const cart = new cartSchema({
+          cartItems: [cartItems],
+          favoritesItems,
+          customerName,
+          mobile,
+        });
+        await cart.save();
+        res.status(201).json({
+          status: "success",
+          message: "Cart created successfully",
+          data: cart,
+        });
+      } else {
+        res.status(400).json({
+          status: "failed",
+          message: "Cannot create a cart with zero quantity",
+        });
+      }
     }
   } catch (err) {
-    console.log("err in addcart");
+    console.error("Error in addCart:", err);
     res.status(500).json({
       err: err.message,
       status: "failed",
