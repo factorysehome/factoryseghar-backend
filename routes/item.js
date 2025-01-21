@@ -91,5 +91,30 @@ router.post("/getItems", async (req, res) => {
     });
   }
 });
+router.post("/searchItems", async (req, res) => {
+  const { query } = req.body;
+
+  try {
+    // Search by name, case-insensitive
+    const response = await ItemSchema.find({
+      name: { $regex: query, $options: "i" }, // Case-insensitive search in the 'name' field
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "Items retrieved successfully",
+      data: {
+        items: response,
+        itemCount: response.length,
+      },
+    });
+  } catch (err) {
+    console.error("Error in searchItems API:", err.message);
+    res.status(500).json({
+      status: "failed",
+      message: "Something went wrong",
+    });
+  }
+});
 
 module.exports = router;
