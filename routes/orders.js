@@ -144,4 +144,59 @@ router.post("/orderHistory", async (req, res) => {
   }
 });
 
+function calculateDiscountedPrice(originalPrice, discountPercentage) {
+  if (originalPrice < 0 || discountPercentage < 0 || discountPercentage > 100) {
+    throw new Error(
+      "Invalid input: original price and discount percentage must be non-negative, and discount percentage should not exceed 100."
+    );
+  }
+
+  const discountAmount = (originalPrice * discountPercentage) / 100;
+  const discountedPrice = originalPrice - discountAmount;
+
+  return discountedPrice.toFixed(2); // Returns the result as a string with 2 decimal places
+}
+
+router.post("/getPrice", (req, res) => {
+  const { price, cashback } = req.body;
+
+  try {
+    if (!price) {
+      return res.status(400).json({ error: "Valid price is required." });
+    }
+
+    const deliveryFee = 75;
+    let finalPrice = {};
+
+    if (price > 2000) {
+      finalPrice.price = price;
+      finalPrice.discount = "50% off";
+      const discountedPrice = calculateDiscountedPrice(price, 50);
+      finalPrice.deliveryFee = 75;
+      const totalBeforeCashback = discountedPrice + deliveryFee;
+
+      // Ensure cashback doesn't exceed the total amount
+      finalPrice.cashback =
+        cashback && cashback > totalBeforeCashback
+          ? totalBeforeCashback
+          : cashback || 0;
+      finalPrice.totalAmount = totalBeforeCashback - finalPrice.cashback;
+    } else {
+      finalPrice.price = price;
+      finalPrice.discount = "20% off";
+      finalPrice.cashback = 0; // No cashback for price ≤ 2000
+      finalPrice.deliveryFee = 75;
+      const discountedPrice = calculateDiscountedPrice(price, 20);
+      finalPrice.totalAmount = discountedPrice + deliveryFee;
+    }
+
+    return res.status(200).json(finalPrice);
+  } catch (err) {
+    console.error("Error in /getPrice:", err);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while calculating the price." });
+  }
+});
+
 module.exports = router;
