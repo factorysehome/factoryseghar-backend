@@ -117,17 +117,30 @@ router.post("/searchItems", async (req, res) => {
 });
 
 router.post("/updateItems", async (req, res) => {
-  const { _id, name, image, description, category, productDetail } = req.body;
+  const { name, image, description, category, productDetail, _id } = req.body;
 
   try {
-    const items = await ItemSchema.findOne({ _id });
-    res.json({
-      data: items,
-    });
+    // Ensure `_id` is provided
+    if (!_id) {
+      return res.status(400).json({ error: "Item ID (_id) is required" });
+    }
+
+    // Update the item
+    const updatedItem = await ItemSchema.findOneAndUpdate(
+      { _id }, // Find the item by ID
+      { name, image, description, category, productDetail }, // Fields to update
+      { new: true, runValidators: true } // Options: return updated doc and run validations
+    );
+
+    // If the item is not found
+    if (!updatedItem) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+
+    // Respond with the updated item
+    res.json({ status: "success", data: updatedItem });
   } catch (err) {
-    res.json({
-      err: err.message,
-    });
+    res.status(500).json({ error: err.message });
   }
 });
 
