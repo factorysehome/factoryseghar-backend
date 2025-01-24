@@ -3,7 +3,7 @@ const cartSchema = require("../models/Cart");
 const router = express.Router();
 
 router.post("/addCart", async (req, res) => {
-  const { cartItems, customerName, mobile, image } = req.body;
+  const { cartItems, customerName, mobile } = req.body;
 
   try {
     const existingCart = await cartSchema.findOne({ mobile });
@@ -45,10 +45,8 @@ router.post("/addCart", async (req, res) => {
       if (cartItems.quantity > 0) {
         const cart = new cartSchema({
           cartItems: [cartItems],
-
           customerName,
           mobile,
-          image,
         });
         await cart.save();
         res.status(201).json({
