@@ -14,11 +14,10 @@ router.post("/addItem", async (req, res) => {
   const { name, image, description, category, productDetail } = req.body;
 
   try {
-    const base64Data = image.split(",")[1]; // Remove "data:image/png;base64," part
-    const contentType = image.split(";")[0].split(":")[1]; // Extract content type (e.g., image/jpeg)
+    const base64Data = image.split(",")[1];
+    const contentType = image.split(";")[0].split(":")[1];
 
-    // Create a unique file name for Firebase Storage
-    const fileName = `images/${Date.now()}.jpg`; // Change extension based on the content type
+    const fileName = `images/${Date.now()}.jpg`;
 
     // Upload the image to Firebase Storage
     const buffer = Buffer.from(base64Data, "base64");
@@ -113,6 +112,21 @@ router.post("/searchItems", async (req, res) => {
     res.status(500).json({
       status: "failed",
       message: "Something went wrong",
+    });
+  }
+});
+
+router.post("/updateItems", async (req, res) => {
+  const { _id, name, image, description, category, productDetail } = req.body;
+
+  try {
+    const items = await ItemSchema.findOne({ _id });
+    res.json({
+      data: items,
+    });
+  } catch (err) {
+    res.json({
+      err: err.message,
     });
   }
 });

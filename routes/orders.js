@@ -3,6 +3,7 @@ const orderSchema = require("../models/Order");
 const razorpayInstance = require("../config/razorpay");
 const crypto = require("crypto");
 const authSchema = require("../models/Auth");
+const cartSchema = require("../models/Cart");
 
 const router = express.Router();
 function generateOrderId() {
@@ -37,7 +38,16 @@ router.post("/placeOrder", async (req, res) => {
     });
     await newOrder.save();
 
-    // Respond to the client with the Razorpay order details
+    const cart = await cartSchema.findOne({ mobile });
+
+    if (cart) {
+      cart.items = cart.items.filter(
+        (cartItem) => !items.some((orderItem) => orderItem.id === cartItem.id)
+      );
+
+      await cart.save();
+    }
+
     res.status(200).json({
       message: "Order created successfully",
       razorpayOrderId: razorpayOrder.id,

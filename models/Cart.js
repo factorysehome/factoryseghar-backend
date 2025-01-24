@@ -14,14 +14,6 @@ const cart = new mongoose.Schema({
       price: { type: Number, required: true },
     },
   ],
-  favoritesItems: [
-    {
-      productName: { type: String, required: true },
-      productDetail: { type: {} },
-      quantity: { type: Number, required: true },
-      price: { type: Number, required: true },
-    },
-  ],
 });
 
 module.exports = mongoose.model("cart", cart);
