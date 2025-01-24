@@ -13,7 +13,8 @@ function generateOrderId() {
 }
 
 router.post("/placeOrder", async (req, res) => {
-  const { items, totalAmount, mobile, address, customerName } = req.body;
+  const { items, totalAmount, mobile, address, cashbackUsed, customerName } =
+    req.body;
 
   try {
     const orderId = generateOrderId();
@@ -49,10 +50,14 @@ router.post("/placeOrder", async (req, res) => {
               JSON.stringify(cartItem.productDetail)
           )
       );
-      console.log(cart);
+
       await cart.save();
     }
-
+    const user = await authSchema.findOne({ mobile });
+    console.log(user);
+    user.cashback = user.cashback - cashbackUsed;
+    const response = await user.save();
+    console.log(response);
     res.status(200).json({
       message: "Order created successfully",
       razorpayOrderId: razorpayOrder.id,
