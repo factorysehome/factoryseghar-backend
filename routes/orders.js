@@ -172,8 +172,8 @@ router.post("/getPrice", (req, res) => {
       finalPrice.price = price;
       finalPrice.discount = "50% off";
       const discountedPrice = calculateDiscountedPrice(price, 50);
-      finalPrice.deliveryFee = 75;
-      const totalBeforeCashback = discountedPrice + deliveryFee;
+      finalPrice.deliveryFee = "0";
+      const totalBeforeCashback = discountedPrice;
 
       // Ensure cashback doesn't exceed the total amount
       finalPrice.cashback =
