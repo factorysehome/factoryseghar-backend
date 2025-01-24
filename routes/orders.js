@@ -41,10 +41,15 @@ router.post("/placeOrder", async (req, res) => {
     const cart = await cartSchema.findOne({ mobile });
 
     if (cart) {
-      cart.items = cart.items.filter(
-        (cartItem) => !items.some((orderItem) => orderItem.id === cartItem.id)
+      cart.cartItems = cart.cartItems.filter(
+        (cartItem) =>
+          !items.some(
+            (orderItem) =>
+              JSON.stringify(orderItem.productDetail) ===
+              JSON.stringify(cartItem.productDetail)
+          )
       );
-
+      console.log(cart);
       await cart.save();
     }
 
