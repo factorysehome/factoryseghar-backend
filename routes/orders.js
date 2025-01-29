@@ -199,4 +199,29 @@ router.post("/getPrice", (req, res) => {
   }
 });
 
+router.post("/getAllOrders", async (req, res) => {
+  const { page } = req.body;
+  try {
+    // Ensure page and limit are numbers
+    const pageNumber = parseInt(page, 10);
+    const limitNumber = parseInt(10, 10);
+
+    const orders = await orderSchema
+      .find()
+      .skip((pageNumber - 1) * limitNumber)
+      .limit(limitNumber);
+
+    const totalOrders = await orderSchema.countDocuments();
+
+    res.json({
+      orders,
+      totalOrders,
+      totalPages: Math.ceil(totalOrders / limitNumber),
+      currentPage: pageNumber,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
