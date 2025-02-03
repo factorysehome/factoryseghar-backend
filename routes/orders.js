@@ -173,7 +173,8 @@ router.post("/getPrice", (req, res) => {
       finalPrice.discount = "50% off";
       const discountedPrice = calculateDiscountedPrice(price, 50);
       finalPrice.deliveryFee = "0";
-      const totalBeforeCashback = discountedPrice;
+      const totalBeforeCashback = Math.floor(discountedPrice);
+      finalPrice.priceAfterDiscount = Math.floor(discountedPrice);
 
       // Ensure cashback doesn't exceed the total amount
       finalPrice.cashback =
@@ -187,7 +188,8 @@ router.post("/getPrice", (req, res) => {
       finalPrice.cashback = 0; // No cashback for price ≤ 2000
       finalPrice.deliveryFee = 75;
       const discountedPrice = calculateDiscountedPrice(price, 20);
-      finalPrice.totalAmount = discountedPrice + deliveryFee;
+      finalPrice.priceAfterDiscount = Math.floor(discountedPrice);
+      finalPrice.totalAmount = Math.floor(discountedPrice) + deliveryFee;
     }
 
     return res.status(200).json(finalPrice);
