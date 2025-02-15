@@ -26,7 +26,7 @@ const pages = [
 Welcome to Factory Se Ghar ("Factory Se Ghar," "we," "our," or "us"). These Terms and Conditions ("Terms") govern your access to and use of our website, mobile applications, and services (collectively, the "Services"). By accessing or using our Services, you agree to be bound by these Terms, which constitute a legal agreement between you and Factory Se Ghar. If you do not agree to these Terms, please refrain from using our Services.
 
 2. Account Registration
-2.1 Eligibility: You must be at least 18 years old and a resident of [Country Name] to register for an account with Factory Se Ghar and use our Services.
+2.1 Eligibility: You must be at least 18 years old and a resident of India to register for an account with Factory Se Ghar and use our Services.
 2.2 Account Information: You agree to provide accurate, current, and complete information during the registration process and to keep your account information updated.
 2.3 Security: You are responsible for safeguarding your account credentials and for all activities that occur under your account. Notify us immediately if you suspect any unauthorized use of your account.
 
@@ -46,8 +46,8 @@ Welcome to Factory Se Ghar ("Factory Se Ghar," "we," "our," or "us"). These Term
 5.3 Address Accuracy: You are responsible for providing an accurate delivery address. We are not responsible for failed deliveries due to incorrect information.
 
 6. Returns and Refunds
-6.1 Return Policy: Returns will be accepted only if the product is defective or not as described. Customers must initiate a return request within [X] days of receiving the product.
-6.2 Refund Process: Refunds, if applicable, will be processed within [X] business days after verification of the returned item.
+6.1 Return Policy: Returns will be accepted only if the product is defective or not as described. Customers must initiate a return request within 3 days of receiving the product.
+6.2 Refund Process: Refunds, if applicable, will be processed within 7 business days after verification of the returned item.
 6.3 Non-Refundable Items: Certain items, such as customized or perishable goods, may not be eligible for returns or refunds.
 
 7. User Conduct
@@ -70,7 +70,7 @@ You agree to indemnify, defend, and hold harmless Factory Se Ghar, its affiliate
 11.2 Termination by Factory Se Ghar: Factory Se Ghar may suspend or terminate your access to the Services at any time, without notice, if we believe you have violated these Terms or any applicable laws.
 
 12. Governing Law
-These Terms are governed by and construed in accordance with the laws of [Country Name]. Any disputes arising under or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts of [Country Name].
+These Terms are governed by and construed in accordance with the laws of India. Any disputes arising under or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts of India.
 
 13. Amendments
 Factory Se Ghar reserves the right to modify these Terms at any time. We will notify you of any significant changes by posting the new Terms on our website and, if necessary, by sending you an email notification.
